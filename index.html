@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>เกมเรียงคำ 💖</title>
+
+<style>
+  body {
+    background: #ffd6e7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: sans-serif;
+    margin: 0;
+  }
+
+  .box {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    width: 300px;
+  }
+
+  .answer {
+    min-height: 50px;
+    border: 2px dashed #ff4d88;
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  button {
+    margin: 5px;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background: #ff4d88;
+    color: white;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="box">
+  <h1>🎮 เรียงคำให้ถูก!</h1>
+
+  <div id="answer" class="answer"></div>
+  <div id="words"></div>
+
+  <p id="result"></p>
+</div>
+
+<!-- 🔊 เสียง -->
+<audio id="correctSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
+<audio id="wrongSound" src="https://www.soundjay.com/button/sounds/beep-10.mp3"></audio>
+
+<script>
+let correct = ["รัก", "ข้าว", "มาก", "น้า🥰"];
+let shuffled = ["มาก", "รัก", "น้า🥰", "ข้าว"];
+
+let user = [];
+
+function renderWords() {
+  let container = document.getElementById("words");
+  container.innerHTML = "";
+
+  shuffled.forEach(word => {
+    let btn = document.createElement("button");
+    btn.innerText = word;
+    btn.onclick = () => selectWord(word, btn);
+    container.appendChild(btn);
+  });
+}
+
+function selectWord(word, btn) {
+  user.push(word);
+
+  let span = document.createElement("span");
+  span.innerText = word + " ";
+  document.getElementById("answer").appendChild(span);
+
+  btn.style.display = "none";
+
+  if (user.length === correct.length) {
+    checkAnswer();
+  }
+}
+
+function checkAnswer() {
+  if (JSON.stringify(user) === JSON.stringify(correct)) {
+    document.getElementById("correctSound").play();
+    setTimeout(() => {
+      window.location.href = "win.html";
+    }, 800);
+  } else {
+    document.getElementById("wrongSound").play();
+    document.getElementById("result").innerText = "❌ ลองใหม่อีกครั้ง!";
+    user = [];
+    document.getElementById("answer").innerHTML = "";
+    renderWords();
+  }
+}
+
+renderWords();
+</script>
+
+</body>
+</html>
